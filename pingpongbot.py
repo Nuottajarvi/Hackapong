@@ -6,7 +6,7 @@ import socket
 import sys
 import tf3bot
 import webbrowser
-
+import time
 class JsonOverTcp(object):
     """Send and receive newline delimited JSON messages over TCP."""
     def __init__(self, host, port):
@@ -45,15 +45,17 @@ class PingPongBot(object):
                 'gameIsOn': self._make_move,
                 'gameIsOver': self._game_over
                 }
-        while True:
-            response = self._connection.receive()
-            msg_type, data = response['msgType'], response['data']
-            tf3bot.open_url(msg_type, data)
-            data = tf3bot.handle(data)
-            try:
-                response_handlers[msg_type](data)
-            except KeyError:
-                self._log.error('Unkown response: %s' % msg_type)
+	while True:
+	    response = self._connection.receive()
+	    msg_type, data = response['msgType'], response['data']
+	    tf3bot.open_url(msg_type, data)
+	    data = tf3bot.handle(data)
+	    time.sleep(0.001)
+	    try:
+	        response_handlers[msg_type](data)
+	    except KeyError:
+	        self._log.error('Unkown response: %s' % msg_type)
+		print data
 
     def _game_joined(self, data):
         self._log.info('Game visualization url: %s' % data)

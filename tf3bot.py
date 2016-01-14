@@ -86,7 +86,12 @@ def projectedTarget(data):
 		if ((calcX < 0 and not ourside) or ( calcX > fieldWidth  and ourside)) and not xFlippedFlag:
 			xFlip=-xFlip
 			xFlippedFlag = True
-
+	if xFlippedFlag:#improving future projection.
+		if calcY<(fieldHeight/2):#top part
+			calcY=(fieldHeight/2)-(((fieldHeight/2)-calcY)/2)
+		else:#bottom part
+			calcY=(fieldHeight/2)+((calcY-(fieldHeight/2))/2)
+	
 	return calcY	
 
 				
@@ -113,17 +118,17 @@ def movePaddle(data, projectedY):
 	offset = 0
 
 	if ownLocation == 0 and enemyLocation == 0:
-		offset = paddleHeight / 2.5
+		offset = paddleHeight / 2.7
 	elif ownLocation == 0 and enemyLocation == 1:
 		offset = 0
 	elif ownLocation == 1 and enemyLocation == 0:
-		offset = paddleHeight / 2.5
+		offset = paddleHeight / 2.7
 	elif ownLocation == 1 and enemyLocation == 1:
-		offset = -paddleHeight / 2.5
+		offset = -paddleHeight / 2.7
 	elif ownLocation == 2 and enemyLocation == 0:
 		offset = 0
 	elif ownLocation == 2 and enemyLocation == 1:
-		offset = -paddleHeight / 2.5
+		offset = -paddleHeight / 2.7
 
 	projectedY -= paddleHeight / 2 + offset
 	
