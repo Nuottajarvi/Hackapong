@@ -17,6 +17,8 @@ paddleWidth = 0
 ballRadius = 0
 tickInterval = 0
 
+ourside=0
+
 prevX = 0
 prevY = 0 
 currX = 0
@@ -55,19 +57,30 @@ def collectValues(data):
 		ballRadius=data["conf"]["ballRadius"]
 		global tickInterval
 		tickInterval=data["conf"]["tickInterval"]
+	if 'left' in data:
+		global ourside
+		if data["left"]["playername"] is "tf3":	
+			ourside=True
+		else:
+			ourside=False
 
 def projectedTarget(data):	
 	direction(data["ball"]["pos"]["x"],data["ball"]["pos"]["y"])	
 	calcX=currX
 	calcY=currY
-	flipped=1
-
-	while calcX > paddleWidth and calcX < fieldWidth - paddleWidth:
-		calcX+=dirX		
-		calcY+=dirY*flipped
+	yFlip=1
+	xFlip=1
+	while (calcX > paddleWidth and ourside) or ( calcX < fieldWidth - paddleWidth and not ourside):
+		calcX+=dirX*xFlip		
+		calcY+=dirY*yFlip
 		if (calcY<=ballRadius or calcY>=fieldHeight-ballRadius):
-			flipped=-flipped	
-	return calcY
+			yFlip=-yFlip
+		if (calcX > paddleWidth and not ourside) or ( calcX < fieldWidth - paddleWidth and ourside):
+			xFlip=-xFlip
+	return calcY	
+
+				
+	
 
 
 def movePaddle(data, projectedY):
