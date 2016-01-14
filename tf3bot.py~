@@ -9,5 +9,3 @@ def rotation(data):
 		bY = data["ball"]["pos"]["y"]
 		rot = (bY-prevY)/(bX-prevX)
 		return rot
-
-
