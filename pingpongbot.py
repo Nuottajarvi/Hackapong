@@ -42,7 +42,7 @@ class PingPongBot(object):
         while True:
             response = self._connection.receive()
             msg_type, data = response['msgType'], response['data']
-            data = tf3bot.handle(data);
+            data = tf3bot.handle(data)
             try:
                 response_handlers[msg_type](data)
             except KeyError:
@@ -55,7 +55,7 @@ class PingPongBot(object):
         self._log.info('Game started: %s vs. %s' % (data[0], data[1]))
 
     def _make_move(self, data):
-        self._connection.send({'msgType': 'changeDir', 'data': -1.0})
+        self._connection.send({'msgType': 'changeDir', 'data': data})
 
     def _game_over(self, data):
         self._log.info('Game ended. Winner: %s' % data)
