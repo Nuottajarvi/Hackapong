@@ -1,25 +1,29 @@
 def handle(data):
-	projectedY=projectedTarget(data)
-	if 'left' in data:
-		data = movePaddle(data)
+	
+	if 'ball' in data:
+		collectValues(data);
+		projectedY=projectedTarget(data)
+		print projectedY
+		if 'left' in data:
+			data = movePaddle(data, projectedY)
 	return data
 
-fieldHeight
-fieldWidth
+fieldHeight = 0
+fieldWidth = 0
 
-paddleHeight
-paddleWidth
+paddleHeight = 0
+paddleWidth = 0
 
-ballRadius
-tickInterval
+ballRadius = 0
+tickInterval = 0
 
-prevX
-prevY
-currX
-currY
+prevX = 0
+prevY = 0 
+currX = 0
+currY = 0
 
-dirX
-dirY
+dirX = 0
+dirY = 0
 
 def direction(ballX, ballY):
 	global currX
@@ -27,14 +31,14 @@ def direction(ballX, ballY):
 	global currY
 	currY=ballY			
 	
+	global prevX
 	global dirX
 	dirX=currX-prevX
 	global dirY
+	global prevY
 	dirY=currY-prevY
 	
-	global prevY
 	prevY=currY
-	global prevX
 	prevX=currX				
 
 def collectValues(data):
@@ -57,29 +61,26 @@ def projectedTarget(data):
 	calcX=currX
 	calcY=currY
 	flipped=1
-	while calcX < paddleWidth or calcX > fieldWidth - paddleWidth:
-		calcX+=currX		
-		calcY+=currY*flipped
+
+	while calcX > paddleWidth and calcX < fieldWidth - paddleWidth:
+		calcX+=dirX		
+		calcY+=dirY*flipped
 		if (calcY<=ballRadius or calcY>=fieldHeight-ballRadius):
 			flipped=-flipped	
 	return calcY
 
 
-def movePaddle(data):
-	if 'ball' in data:
-		ballY = data["ball"]["pos"]["y"]
-		
-		paddleHeight = 0
-		if 'left' in data:
-			paddleHeight = data["left"]["y"]
+def movePaddle(data, projectedY):
 
-		if(paddleHeight > ballY):
-			data = -1.0
-		else:
-			data = 1.0
-		
-		return data
+	paddleHeight = 0
+	if 'left' in data:
+		paddleHeight = data["left"]["y"]
+
+	if(paddleHeight > projectedY):
+		data = -1.0
 	else:
-		return 0.0
+		data = 1.0
+	
+	return data
 
 
