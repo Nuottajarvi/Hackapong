@@ -6,7 +6,6 @@ def handle(data):
 	if 'ball' in data:
 		collectValues(data);
 		projectedY=projectedTarget(data)
-		print projectedY
 		if 'left' in data:
 			data = movePaddle(data, projectedY)
 	return data
@@ -87,15 +86,18 @@ def projectedTarget(data):
 
 
 def movePaddle(data, projectedY):
-
-	paddleHeight = 0
+	global paddleHeight;
+	projectedY -= paddleHeight / 2
+	paddleY = 0
 	if 'left' in data:
-		paddleHeight = data["left"]["y"]
+		paddleY = data["left"]["y"]
 
-	if(paddleHeight > projectedY):
+	if(paddleY - projectedY > 7):
 		data = -1.0
-	else:
+	elif(projectedY - paddleY > 7):
 		data = 1.0
+	else:
+		data = 0.0
 	
 	return data
 
