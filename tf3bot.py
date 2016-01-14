@@ -1,8 +1,8 @@
 import webbrowser
 
 
-def handle(data):
-	
+def handle(data):	
+
 	if 'ball' in data:
 		collectValues(data);
 		projectedY=projectedTarget(data)
@@ -19,7 +19,7 @@ paddleWidth = 0
 ballRadius = 0
 tickInterval = 0
 
-ourside=0
+ourside=True
 
 prevX = 0
 prevY = 0 
@@ -61,7 +61,7 @@ def collectValues(data):
 		tickInterval=data["conf"]["tickInterval"]
 	if 'left' in data:
 		global ourside
-		if data["left"]["playername"] is "tf3":	
+		if data["left"]["playerName"] == "tf3":	
 			ourside=True
 		else:
 			ourside=False
@@ -72,13 +72,17 @@ def projectedTarget(data):
 	calcY=currY
 	yFlip=1
 	xFlip=1
+	xFlippedFlag = False
 	while (calcX > paddleWidth and ourside) or ( calcX < fieldWidth - paddleWidth and not ourside):
 		calcX+=dirX*xFlip		
 		calcY+=dirY*yFlip
+		
 		if (calcY<=ballRadius or calcY>=fieldHeight-ballRadius):
 			yFlip=-yFlip
-		if (calcX > paddleWidth and not ourside) or ( calcX < fieldWidth - paddleWidth and ourside):
+		if ((calcX < 0 and not ourside) or ( calcX > fieldWidth  and ourside)) and not xFlippedFlag:
 			xFlip=-xFlip
+			xFlippedFlag = True
+
 	return calcY	
 
 				
