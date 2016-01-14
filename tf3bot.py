@@ -1,4 +1,8 @@
+import webbrowser
+
+
 def handle(data):
+	
 	return data;
 
 def rotation(data):		
@@ -9,5 +13,8 @@ def rotation(data):
 		bY = data["ball"]["pos"]["y"]
 		rot = (bY-prevY)/(bX-prevX)
 		return rot
-
-
+		
+def open_url(msg_type, data):
+	if msg_type == "joined":
+		webbrowser.open_new(data)
+	
