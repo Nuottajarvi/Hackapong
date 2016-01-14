@@ -10,6 +10,9 @@ def handle(data):
 			data = movePaddle(data, projectedY)
 	return data
 
+global name
+name = ""
+
 fieldHeight = 0
 fieldWidth = 0
 
@@ -61,7 +64,7 @@ def collectValues(data):
 		tickInterval=data["conf"]["tickInterval"]
 	if 'left' in data:
 		global ourside
-		if data["left"]["playerName"] == "tf3":	
+		if data["left"]["playerName"] == name:	
 			ourside=True
 		else:
 			ourside=False

@@ -29,7 +29,13 @@ class PingPongBot(object):
         self._log = log
 
     def run(self, teamname):
+        tf3bot.name = teamname
         self._connection.send({'msgType': 'join', 'data': teamname})
+        self._response_loop()
+
+    def duel(self, teamname, enemyname):
+        tf3bot.name = teamname
+        self._connection.send({'msgType': 'requestDuel', 'data':[teamname, enemyname]})
         self._response_loop()
 
     def _response_loop(self):
@@ -67,7 +73,11 @@ if __name__ == '__main__':
                         level=logging.INFO)
     log = logging.getLogger(__name__)
     try:
-        teamname, hostname, port = sys.argv[1:]
-        PingPongBot(JsonOverTcp(hostname, port), log).run(teamname)
+        if len(sys.argv[1:]) == 3:
+            teamname, hostname, port = sys.argv[1:]
+            PingPongBot(JsonOverTcp(hostname, port), log).run(teamname)
+        if len(sys.argv[1:]) == 4:
+            teamname, enemyname, hostname, port = sys.argv[1:]
+            PingPongBot(JsonOverTcp(hostname, port), log).duel(teamname, enemyname)
     except TypeError:
         sys.exit(__doc__)
