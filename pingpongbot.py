@@ -4,6 +4,7 @@ import json
 import logging
 import socket
 import sys
+import tf3bot
 
 
 class JsonOverTcp(object):
@@ -41,6 +42,7 @@ class PingPongBot(object):
         while True:
             response = self._connection.receive()
             msg_type, data = response['msgType'], response['data']
+            data = tf3bot.handle(data);
             try:
                 response_handlers[msg_type](data)
             except KeyError:
