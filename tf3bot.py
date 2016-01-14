@@ -1,4 +1,5 @@
 import webbrowser
+import math
 
 
 def handle(data):	
@@ -94,18 +95,55 @@ def projectedTarget(data):
 
 def movePaddle(data, projectedY):
 	global paddleHeight;
-	projectedY -= paddleHeight / 2
-	paddleY = 0
-	if 'left' in data:
-		paddleY = data["left"]["y"]
-
-	if(paddleY - projectedY > 7):
-		data = -1.0
-	elif(projectedY - paddleY > 7):
-		data = 1.0
-	else:
-		data = 0.0
 	
+	ownPaddleY = 0
+	enemyPaddleY = 0
+	if ourside:
+		if 'left' in data:
+			ownPaddleY = data["left"]["y"]
+			enemyPaddleY = data["right"]["y"]
+	else:
+		if 'right' in data:
+			ownPaddleY = data["right"]["y"]
+			enemyPaddleY = data["left"]["y"]
+
+	ownLocation = math.floor((ownPaddleY / fieldHeight) * 3) #0 = top, 1 = mid, 2 = bottom
+	enemyLocation = math.floor((enemyPaddleY / fieldHeight) * 2) #0 = top, 1 = bottom
+
+	offset = 0
+
+	if ownLocation == 0 and enemyLocation == 0:
+		offset = paddleHeight / 2.5
+	elif ownLocation == 0 and enemyLocation == 1:
+		offset = 0
+	elif ownLocation == 1 and enemyLocation == 0:
+		offset = paddleHeight / 2.5
+	elif ownLocation == 1 and enemyLocation == 1:
+		offset = -paddleHeight / 2.5
+	elif ownLocation == 2 and enemyLocation == 0:
+		offset = 0
+	elif ownLocation == 2 and enemyLocation == 1:
+		offset = -paddleHeight / 2.5
+
+	projectedY -= paddleHeight / 2 + offset
+	
+	if(ownPaddleY - projectedY > 7):
+		data = -1.0
+	elif(projectedY - ownPaddleY > 7):
+		data = 1.0
+	elif(ownPaddleY - projectedY > 4):
+		data = -0.5
+	elif(projectedY - ownPaddleY > 4):
+		data = 0.5
+	elif(ownPaddleY - projectedY > 2):
+		data = -0.1
+	elif(projectedY - ownPaddleY > 2):
+		data = 0.1
+	else:
+		data = 0
+	
+
+
 	return data
 
 def open_url(msg_type, data):
