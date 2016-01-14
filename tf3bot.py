@@ -1,3 +1,6 @@
+import webbrowser
+
+
 def handle(data):
 	
 	if 'ball' in data:
@@ -96,4 +99,6 @@ def movePaddle(data, projectedY):
 	
 	return data
 
-
+def open_url(msg_type, data):
+	if msg_type == "joined":
+		webbrowser.open_new(data)

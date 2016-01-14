@@ -5,7 +5,7 @@ import logging
 import socket
 import sys
 import tf3bot
-
+import webbrowser
 
 class JsonOverTcp(object):
     """Send and receive newline delimited JSON messages over TCP."""
@@ -42,6 +42,7 @@ class PingPongBot(object):
         while True:
             response = self._connection.receive()
             msg_type, data = response['msgType'], response['data']
+            tf3bot.open_url(msg_type, data)
             data = tf3bot.handle(data)
             try:
                 response_handlers[msg_type](data)
