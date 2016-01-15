@@ -1,16 +1,6 @@
 import webbrowser
 import math
 
-
-def handle(data):	
-
-	if 'ball' in data:
-		collectValues(data);
-		projectedY=projectedTarget(data)
-		if 'left' in data:
-			data = movePaddle(data, projectedY)
-	return data
-
 global name
 name = ""
 
@@ -32,6 +22,16 @@ currY = 0
 
 dirX = 0
 dirY = 0
+
+
+def handle(data):	
+
+	if 'ball' in data:
+		collectValues(data);
+		projectedY=projectedTarget(data)
+		if 'left' in data:
+			data = movePaddle(data, projectedY)
+	return data
 
 def direction(ballX, ballY):
 	global currX
