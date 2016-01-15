@@ -7,26 +7,21 @@ class Vector(object):
         self.x = x
         self.y = y
     def angleDeg(self, comparison):
-        return self.angleRad(comparison) * (180 / math.pi)
+        c = -1
+        if ourside:
+            c = 1
+        return self.angleRad(comparison) * (180 / math.pi) * c
 
     def angleRad(self, comparison):
-    	a = self.x
-    	b = self.y
-    	c = comparison.x
-    	d = comparison.y
+        a = self.x
+        b = self.y
+        c = comparison.x
+        d = comparison.y
 
-    	atanSelf = math.atan2(self.x, self.y)
-    	atanComparison = math.atan2(comparison.x, comparison.y)
+        atanSelf = math.atan2(self.x, self.y)
+        atanComparison = math.atan2(comparison.x, comparison.y)
 
-    	return atanSelf - atanComparison
-
-    def normalize(self):
-        length = math.sqrt(self.x * self.x + self.y * self.y)
-        if(length == 0):
-            return Vector(0,0)
-        self.x /= length
-        self.y /= length
-        return self
+        return atanSelf - atanComparison
 
 global name
 name = ""
@@ -117,9 +112,9 @@ def projectedTarget(data):
 			xFlippedFlag = True
 	if xFlippedFlag:#improving future projection.
 		if calcY<(fieldHeight/2):#top part
-			calcY=(fieldHeight/2)-(((fieldHeight/2)-calcY)/2)
+			calcY=(fieldHeight/2)-(((fieldHeight/2)-calcY)/3*2)
 		else:#bottom part
-			calcY=(fieldHeight/2)+((calcY-(fieldHeight/2))/2)
+			calcY=(fieldHeight/2)+((calcY-(fieldHeight/2))/3*2)
 	else:
 		global arrivalVector;
 		arrivalVector = Vector(dirX*xFlip, dirY*yFlip)
@@ -147,63 +142,48 @@ def movePaddle(data, projectedY):
 	enemyLocation = math.floor((enemyPaddleY / fieldHeight) * 2) #0 = top, 1 = bottom
 
 	ballAngle = arrivalVector.angleDeg(towardsCenter)
-	
-	log = logging.getLogger(__name__)
 
 	offset = 0
 
 	#MAGIC NUMBERS
 
-	m1 = 2.1 #2.7
-	m2 = 3.2 #3.2
+	m1 = 2.4 #2.7
+	m2 = 2.7 #3.2
 
-
+	log = logging.getLogger(__name__)
 	#POSITIIVINEN AMPUU ALASPAIN
 	#TOP
-	if ownLocation == 0 and enemyLocation == 0:
-		offset = paddleHeight / m1
-	elif ownLocation == 0 and enemyLocation == 1:
+	if ownLocation == 0:
 		if(ballAngle > 25):
 			offset = paddleHeight / m1
 		elif(ballAngle < -25):
 			offset = -paddleHeight / m1
+		elif(ballAngle < 0 and enemyLocation == 0):
+			offset = paddleHeight / m1
 		else:
 			offset = 0
 
 	#MIDDLE
-	elif ownLocation == 1 and math.floor((enemyPaddleY / fieldHeight) * 3) == 1: #both in middle
+	elif ownLocation == 1:
 		if(ballAngle > 25):
 			offset = -paddleHeight / m2
 		elif(ballAngle < -25):
 			offset = paddleHeight / m2
-		else:
+		elif(enemyLocation == 0):
 			offset = paddleHeight / m1
-	elif ownLocation == 1 and enemyLocation == 0:
-		if(ballAngle > 25):
-			offset = paddleHeight / m2
-		elif(ballAngle < -25):
-			offset = 0
 		else:
-			offset = paddleHeight / m2
-
-	elif ownLocation == 1 and enemyLocation == 1:
-		if(ballAngle > 25):
-			offset = -paddleHeight / m2
-		elif(ballAngle < -25):
-			offset = 0
-		else:
-			offset = -paddleHeight / m2
+			offset = -paddleHeight / m1
 
 	#BOTTOM
-	elif ownLocation == 2 and enemyLocation == 0:
+	elif ownLocation == 2:
 		if(ballAngle > 25):
 			offset = -paddleHeight / m1
 		elif(ballAngle < -25):
 			offset = paddleHeight / m1
+		elif(ballAngle > 0 and enemyLocation == 2):
+			offset = -paddleHeight / m1
 		else:
 			offset = 0
-	elif ownLocation == 2 and enemyLocation == 1:
-		offset = -paddleHeight / m1
 
 	projectedY -= paddleHeight / 2 + offset
 
