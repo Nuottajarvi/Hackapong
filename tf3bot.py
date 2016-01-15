@@ -189,7 +189,11 @@ def movePaddle(data, projectedY):
 
 	#clamp projectedY
 	projectedY = max(min(projectedY, fieldHeight - paddleHeight), 0)
-	
+	if projectedY<25:
+		projectedY+=20
+	elif projectedY>(fieldWidth-25):
+		projectedY-=20
+
 	if(ownPaddleY - projectedY > 7):
 		data = -1.0
 	elif(projectedY - ownPaddleY > 7):
