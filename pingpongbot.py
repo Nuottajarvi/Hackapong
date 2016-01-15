@@ -12,8 +12,12 @@ class JsonOverTcp(object):
     def __init__(self, host, port):
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((host, int(port)))
+        self._lastMessage = ""
 
     def send(self, data):
+        if(self._lastMessage == data):
+            return;
+        self._lastMessage = data
         self._socket.sendall(json.dumps(data) + '\n')
 
     def receive(self):
@@ -50,7 +54,6 @@ class PingPongBot(object):
 	    msg_type, data = response['msgType'], response['data']
 	    tf3bot.open_url(msg_type, data)
 	    data = tf3bot.handle(data)
-	    time.sleep(0.001)
 	    try:
 	        response_handlers[msg_type](data)
 	    except KeyError:
