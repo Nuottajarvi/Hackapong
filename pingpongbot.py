@@ -70,6 +70,7 @@ class PingPongBot(object):
         self._connection.send({'msgType': 'changeDir', 'data': data})
 
     def _game_over(self, data):
+        self._connection._lastMessage = ""
         self._log.info('Game ended. Winner: %s' % data)
 
 

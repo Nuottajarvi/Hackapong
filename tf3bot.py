@@ -156,54 +156,54 @@ def movePaddle(data, projectedY):
 
 	#TOP
 	if ownLocation == 0 and enemyLocation == 0:
-		log.info(0);
 		offset = paddleHeight / 2.7
 	elif ownLocation == 0 and enemyLocation == 1:
 		if(ballAngle > 25):
-			log.info(1);
 			offset = paddleHeight / 2.7
 		elif(ballAngle < -25):
-			log.info(2);
 			offset = -paddleHeight / 2.7
 		else:
-			log.info(3);
 			offset = 0
-
 
 	#MIDDLE
 	elif ownLocation == 1 and math.floor((enemyPaddleY / fieldHeight) * 3) == 1: #both in middle
 		if(ballAngle > 25):
-			log.info(4);
 			offset = -paddleHeight / 3.2
 		elif(ballAngle < -25):
 			offset = paddleHeight / 3.2
-			log.info(5);
 		else:
 			offset = paddleHeight / 2.7
-			log.info(6);
 	elif ownLocation == 1 and enemyLocation == 0:
-		offset = paddleHeight / 2.7
-		log.info(7);
+		if(ballAngle > 25):
+			offset = paddleHeight / 2.7
+		elif(ballAngle < -25):
+			offset = 0
+		else:
+			offset = paddleHeight / 3.2
+
 	elif ownLocation == 1 and enemyLocation == 1:
-		offset = -paddleHeight / 2.7
-		log.info(8);
+		if(ballAngle > 25):
+			offset = -paddleHeight / 2.7
+		elif(ballAngle < -25):
+			offset = 0
+		else:
+			offset = -paddleHeight / 3.2
 
 	#BOTTOM
 	elif ownLocation == 2 and enemyLocation == 0:
 		if(ballAngle > 25):
-			log.info(9);
 			offset = -paddleHeight / 2.7
 		elif(ballAngle < -25):
-			log.info(10);
 			offset = paddleHeight / 2.7
 		else:
-			log.info(11);
 			offset = 0
 	elif ownLocation == 2 and enemyLocation == 1:
 		offset = -paddleHeight / 2.7
-		log.info(12);
 
 	projectedY -= paddleHeight / 2 + offset
+
+	#clamp projectedY
+	projectedY = max(min(projectedY, fieldHeight - paddleHeight), 0)
 	
 	if(ownPaddleY - projectedY > 7):
 		data = -1.0
