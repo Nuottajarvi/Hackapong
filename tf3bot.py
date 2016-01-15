@@ -152,53 +152,58 @@ def movePaddle(data, projectedY):
 
 	offset = 0
 
-	#POSITIIVINEN AMPUU ALASPAIN
+	#MAGIC NUMBERS
 
+	m1 = 2.1 #2.7
+	m2 = 3.2 #3.2
+
+
+	#POSITIIVINEN AMPUU ALASPAIN
 	#TOP
 	if ownLocation == 0 and enemyLocation == 0:
-		offset = paddleHeight / 2.7
+		offset = paddleHeight / m1
 	elif ownLocation == 0 and enemyLocation == 1:
 		if(ballAngle > 25):
-			offset = paddleHeight / 2.7
+			offset = paddleHeight / m1
 		elif(ballAngle < -25):
-			offset = -paddleHeight / 2.7
+			offset = -paddleHeight / m1
 		else:
 			offset = 0
 
 	#MIDDLE
 	elif ownLocation == 1 and math.floor((enemyPaddleY / fieldHeight) * 3) == 1: #both in middle
 		if(ballAngle > 25):
-			offset = -paddleHeight / 3.2
+			offset = -paddleHeight / m2
 		elif(ballAngle < -25):
-			offset = paddleHeight / 3.2
+			offset = paddleHeight / m2
 		else:
-			offset = paddleHeight / 2.7
+			offset = paddleHeight / m1
 	elif ownLocation == 1 and enemyLocation == 0:
 		if(ballAngle > 25):
-			offset = paddleHeight / 2.7
+			offset = paddleHeight / m2
 		elif(ballAngle < -25):
 			offset = 0
 		else:
-			offset = paddleHeight / 3.2
+			offset = paddleHeight / m2
 
 	elif ownLocation == 1 and enemyLocation == 1:
 		if(ballAngle > 25):
-			offset = -paddleHeight / 2.7
+			offset = -paddleHeight / m2
 		elif(ballAngle < -25):
 			offset = 0
 		else:
-			offset = -paddleHeight / 3.2
+			offset = -paddleHeight / m2
 
 	#BOTTOM
 	elif ownLocation == 2 and enemyLocation == 0:
 		if(ballAngle > 25):
-			offset = -paddleHeight / 2.7
+			offset = -paddleHeight / m1
 		elif(ballAngle < -25):
-			offset = paddleHeight / 2.7
+			offset = paddleHeight / m1
 		else:
 			offset = 0
 	elif ownLocation == 2 and enemyLocation == 1:
-		offset = -paddleHeight / 2.7
+		offset = -paddleHeight / m1
 
 	projectedY -= paddleHeight / 2 + offset
 
