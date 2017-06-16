@@ -32,8 +32,8 @@ class PingPongBot(object):
         self._connection = connection
         self._log = log
 
-    def run(self, teamname):
-        tf3bot.name = teamname
+    def run(self, teamn):
+        tf3bot.name = teamn
         self._connection.send({'msgType': 'join', 'data': teamname})
         self._response_loop()
 
